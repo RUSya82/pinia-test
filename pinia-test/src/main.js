@@ -8,6 +8,6 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 
 //Добавляем pinia как плагин для использования
-const pinia = createPinia();
+// const pinia = createPinia();
 
-createApp(App).use(pinia).mount('#app');
+createApp(App).mount('#app');

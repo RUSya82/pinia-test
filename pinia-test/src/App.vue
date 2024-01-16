@@ -1,30 +1,33 @@
-<template>
-  <div class="page-auth">
-    <page-login v-if="!isAuthenticated" />
-    <div v-else>{{ user }}</div>
-  </div>
-</template>
+<script lang="jsx">
+import ListView from './components/ListView.vue';
 
-<script setup>
-import { storeToRefs } from 'pinia';
-import PageLogin from './components/PageLogin.vue';
-import { useAuthStore } from './stores/useAuthStore.js';
-import {computed} from "vue";
+export default {
+  components: {
+    ListView,
+  },
 
-//тырим объект с данными из стора
-const authStore = useAuthStore();
+  data() {
+    return {
+      list: [
+        {
+          id: 1,
+          name: 'Alice',
+        },
+        {
+          id: 2,
+          name: 'Bob',
+        },
+      ],
+    };
+  },
 
-//чтобы сохранить реактивность, переменные вытаскиваем через computed или toRefs
-const user = computed(() => authStore.user);
-const isAuthenticated = computed(() => authStore.isAuthenticated);
-
-//второй вариант - воспользоваться хелпером storeToRefs, который сделает переменные реактивными
-//но достает только свойства, которые методами не являются
-// const { user, isAuthenticated } = storeToRefs(authStore);
+  render() {
+    const renderItem = ({ item, index, remove }) => (
+        <button type="button" onClick={() => remove()}>
+          {`${index}: ${item.name}`}
+        </button>
+    );
+    return <ListView v-model={[this.list, 'items']} renderItem={renderItem} />;
+  },
+};
 </script>
-
-<style>
-@import './assets/styles/_fonts.css';
-@import './assets/styles/_variables.css';
-@import './assets/styles/_common.css';
-</style>
