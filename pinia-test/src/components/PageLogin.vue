@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia';
+import {mapActions, mapStores} from 'pinia';
 import { useAuthStore } from '../stores/useAuthStore.js';
 
 export default {
@@ -36,12 +36,26 @@ export default {
     };
   },
 
+  //один из вариантов - это прописать в CompositionAPI
+  setup(){
+    return {
+      authStore: useAuthStore()
+    }
+  },
+
+  //хелпер для того, чтобы передать свойства стор в computed
+  computed: {
+    ...mapStores(useAuthStore, ['isAuthenticated'])
+  },
+
   methods: {
-    ...mapActions(useAuthStore, ['login']),
+    // ...mapActions(useAuthStore, ['login']),
 
     async handleSubmit() {
       try {
-        await this.login(this.email, this.password);
+        //для CompositonAPI пользуемся authStore как переменной
+        await this.authStore.login(this.email, this.password)
+        // await this.login(this.email, this.password);
         // await useAuthStore().login(this.email, this.password);
         // await useAuthStore(this.$pinia).login(this.email, this.password);
       } catch (e) {
